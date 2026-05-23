@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YouTube Automation Mastery | Phase 1 — Free Course</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --surface: #111114;
+    --card: #18181d;
+    --border: #2a2a32;
+    --accent: #e8ff47;
+    --accent2: #ff4747;
+    --text: #f0f0f5;
+    --muted: #7a7a90;
+    --pill-bg: #1e1e26;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .nav-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 140px 40px 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 10vw, 130px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .hero h1 span {
+    color: var(--accent);
+    display: block;
+  }
+
+  .hero-sub {
+    margin-top: 32px;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 520px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-sub strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .hero-cta {
+    margin-top: 48px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--accent);
+    color: #0a0a0b;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 16px 36px;
+    border-radius: 4px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(232,255,71,0.3);
+  }
+
+  .btn-ghost {
+    display: inline-block;
+    background: transparent;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 16px 36px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero-stats {
+    margin-top: 72px;
+    display: flex;
+    gap: 60px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  .stat-item {}
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+
+  /* ─── DIVIDER ─── */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 40px;
+  }
+
+  /* ─── SECTION WRAPPER ─── */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 40px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 80px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6vw, 72px);
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .section-title em {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-weight: 300;
+    font-size: 16px;
+    max-width: 560px;
+    margin-bottom: 56px;
+  }
+
+  /* ─── TRUTH SECTION ─── */
+  .truth-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .truth-card {
+    background: var(--card);
+    padding: 36px;
+    transition: background 0.2s;
+  }
+
+  .truth-card:hover {
+    background: #1e1e26;
+  }
+
+  .truth-icon {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .truth-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .truth-card p {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* ─── MODULES ─── */
+  .modules-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+
+  .module-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: center;
+    gap: 32px;
+    padding: 32px 36px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .module-item:last-child { border-bottom: none; }
+
+  .module-item:hover {
+    background: var(--card);
+  }
+
+  .module-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--border);
+    line-height: 1;
+    transition: color 0.2s;
+    user-select: none;
+  }
+
+  .module-item:hover .module-num {
+    color: var(--accent);
+  }
+
+  .module-info h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .module-info p {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .module-meta {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .module-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .module-tag.free {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,255,71,0.06);
+  }
+
+  .module-duration {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ─── VIDEO EMBED AREA ─── */
+  .video-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .video-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 40px;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 80px;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .video-inner { grid-template-columns: 1fr; }
+  }
+
+  .video-placeholder {
+    aspect-ratio: 16/9;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .video-placeholder:hover {
+    border-color: var(--accent);
+  }
+
+  .video-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(232,255,71,0.03) 0%, transparent 60%);
+  }
+
+  .play-btn {
+    width: 64px;
+    height: 64px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: transform 0.2s;
+  }
+
+  .video-placeholder:hover .play-btn {
+    transform: scale(1.08);
+  }
+
+  .play-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: #0a0a0b;
+    margin-left: 4px;
+  }
+
+  .video-label {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .video-side h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .video-side h2 em {
+    color: var(--accent);
+    font-style: normal;
+    display: block;
+  }
+
+  .video-side p {
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 300;
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 300;
+  }
+
+  .checklist li::before {
+    content: '✓';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 10px;
+  }
+
+  /* ─── NICHE CARDS ─── */
+  .niches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .niche-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 24px;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+
+  .niche-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+  }
+
+  .niche-emoji {
+    font-size: 30px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .niche-card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .niche-card p {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .niche-card .niche-cpm {
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* ─── TOOLS SECTION ─── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .tool-card {
+    background: var(--card);
+    padding: 32px;
+    transition: background 0.2s;
+  }
+
+  .tool-card:hover { background: #1c1c24; }
+
+  .tool-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .tool-purpose {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .tool-badge.free { background: rgba(232,255,71,0.1); color: var(--accent); }
+  .tool-badge.paid { background: rgba(255,71,71,0.1); color: var(--accent2); }
+  .tool-badge.optional { background: rgba(120,120,150,0.1); color: var(--muted); }
+
+  /* ─── MISTAKES SECTION ─── */
+  .mistakes-list {
+    counter-reset: mistakes;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+
+  .mistake-item {
+    counter-increment: mistakes;
+    padding: 32px 36px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    align-items: start;
+    transition: background 0.2s;
+  }
+
+  .mistake-item:last-child { border-bottom: none; }
+  .mistake-item:hover { background: var(--card); }
+
+  .mistake-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--accent2);
+    line-height: 1;
+    opacity: 0.6;
+  }
+
+  .mistake-content h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .mistake-content p {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* ─── QUOTE BANNER ─── */
+  .quote-banner {
+    background: var(--accent);
+    padding: 80px 40px;
+    text-align: center;
+  }
+
+  .quote-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 5vw, 60px);
+    color: #0a0a0b;
+    letter-spacing: 1px;
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.05;
+  }
+
+  .quote-attr {
+    margin-top: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: rgba(10,10,11,0.5);
+    text-transform: uppercase;
+  }
+
+  /* ─── ROADMAP ─── */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0;
+    position: relative;
+    border: 1px solid var(--border);
+  }
+
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .roadmap-step {
+    padding: 48px 32px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .roadmap-step:last-child { border-right: none; }
+
+  .roadmap-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--muted);
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .roadmap-step:hover .roadmap-circle {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .roadmap-step h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .roadmap-step p {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* ─── CTA SECTION ─── */
+  .cta-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .cta-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 120px 40px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 80px;
+    align-items: center;
+  }
+
+  @media (max-width: 700px) {
+    .cta-inner { grid-template-columns: 1fr; text-align: center; }
+  }
+
+  .cta-inner h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 6vw, 80px);
+    letter-spacing: 1px;
+    line-height: 0.95;
+    margin-bottom: 20px;
+  }
+
+  .cta-inner h2 em {
+    color: var(--accent);
+    font-style: normal;
+    display: block;
+  }
+
+  .cta-inner p {
+    color: var(--muted);
+    font-weight: 300;
+    font-size: 16px;
+    max-width: 480px;
+  }
+
+  .cta-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 48px 40px;
+    min-width: 300px;
+    text-align: center;
+  }
+
+  .cta-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .cta-price-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .cta-features {
+    list-style: none;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .cta-features li {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cta-features li span {
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--accent);
+  }
+
+  .footer-note {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── MARQUEE ─── */
+  .marquee-wrapper {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    background: var(--surface);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 64px;
+    animation: marquee 25s linear infinite;
+    width: max-content;
+  }
+
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    white-space: nowrap;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .marquee-item::after {
+    content: '✦';
+    color: var(--accent);
+    font-size: 12px;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 700px) {
+    nav { padding: 16px 20px; }
+    .hero, .section { padding-left: 20px; padding-right: 20px; }
+    .hero-stats { gap: 32px; }
+    .module-item { grid-template-columns: 60px 1fr; gap: 16px; }
+    .module-meta { display: none; }
+    .section-divider { margin: 0 20px; }
+    footer { padding: 32px 20px; }
+    .roadmap { grid-template-columns: 1fr 1fr; }
+    .roadmap::before { display: none; }
+    .roadmap-step { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">YT AUTO</a>
+  <span class="nav-badge">Phase 1 of 5 — Free</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Introduction Course — 2026 Edition</div>
+  <h1>
+    YouTube
+    <span>Automation</span>
+    Mastery.
+  </h1>
+  <p class="hero-sub">
+    The truth nobody tells you. Build a <strong>faceless YouTube channel</strong> that generates passive income — without showing your face, recording your voice, or being creative every day.
+  </p>
+  <div class="hero-cta">
+    <a href="#modules" class="btn-primary">Start Free Course →</a>
+    <a href="#roadmap" class="btn-ghost">See the Roadmap</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Course Phases</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">23+</div>
+      <div class="stat-label">Video Lessons</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">$0</div>
+      <div class="stat-label">Phase 1 Cost</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Scaling Potential</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrapper">
+  <div class="marquee-track">
+    <span class="marquee-item">Niche Research</span>
+    <span class="marquee-item">Faceless Channels</span>
+    <span class="marquee-item">AI Voiceovers</span>
+    <span class="marquee-item">Video Automation</span>
+    <span class="marquee-item">Monetization</span>
+    <span class="marquee-item">Outsourcing Editors</span>
+    <span class="marquee-item">Passive Income</span>
+    <span class="marquee-item">Thumbnail Strategy</span>
+    <span class="marquee-item">Niche Research</span>
+    <span class="marquee-item">Faceless Channels</span>
+    <span class="marquee-item">AI Voiceovers</span>
+    <span class="marquee-item">Video Automation</span>
+    <span class="marquee-item">Monetization</span>
+    <span class="marquee-item">Outsourcing Editors</span>
+    <span class="marquee-item">Passive Income</span>
+    <span class="marquee-item">Thumbnail Strategy</span>
+  </div>
+</div>
+
+<!-- TRUTH SECTION -->
+<div class="section-divider"></div>
+<section class="section">
+  <div class="section-label reveal">01 — The Reality</div>
+  <h2 class="section-title reveal">The Truth <em>Nobody</em> Tells You</h2>
+  <p class="section-desc reveal">Most YouTube "gurus" are selling you a dream. Here's what actually matters to build a sustainable automation channel.</p>
+
+  <div class="truth-grid">
+    <div class="truth-card reveal">
+      <div class="truth-icon">⚠️</div>
+      <h3>It's Not Passive — At First</h3>
+      <p>The first 3–6 months require real work. Automation kicks in once your systems are built. Most people quit before that happens.</p>
+    </div>
+    <div class="truth-card reveal">
+      <div class="truth-icon">🎯</div>
+      <h3>Niche Is Everything</h3>
+      <p>A bad niche means zero revenue no matter how good your content is. CPM rates vary from $1 to $40+. We'll show you which niches actually pay.</p>
+    </div>
+    <div class="truth-card reveal">
+      <div class="truth-icon">🤖</div>
+      <h3>AI Is a Tool, Not a Shortcut</h3>
+      <p>AI speeds up production but can't replace strategy. Channels that understand their audience scale. Channels chasing tools fail.</p>
+    </div>
+    <div class="truth-card reveal">
+      <div class="truth-icon">📈</div>
+      <h3>The Compound Effect Is Real</h3>
+      <p>One channel consistently posting for 12 months outperforms ten channels abandoned at month 3. Consistency wins every time.</p>
+    </div>
+    <div class="truth-card reveal">
+      <div class="truth-icon">💸</div>
+      <h3>AdSense Is Just the Start</h3>
+      <p>The real money is in affiliates, sponsorships, and digital products. AdSense is your floor, not your ceiling.</p>
+    </div>
+    <div class="truth-card reveal">
+      <div class="truth-icon">🏗️</div>
+      <h3>Systems Beat Hustle</h3>
+      <p>Building a repeatable production pipeline using Fiverr, Upwork, and AI tools is what makes this truly automated — not willpower.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO SECTION -->
+<div class="video-section">
+  <div class="video-inner">
+    <div class="video-placeholder reveal" onclick="this.innerHTML='<iframe width=\'100%\' height=\'100%\' src=\'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1\' frameborder=\'0\' allowfullscreen style=\'border-radius:4px\'></iframe>'">
+      <div class="play-btn">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <span class="video-label">Watch: Phase 1 Intro — 14 min</span>
+    </div>
+
+    <div class="video-side reveal">
+      <h2>Start Here.<em>Watch This First.</em></h2>
+      <p>Before jumping into tools and tactics, understand the business model. This intro video covers everything you need to know before publishing your first video.</p>
+      <ul class="checklist">
+        <li>What YouTube Automation actually is</li>
+        <li>The 4 business models (and which one to pick)</li>
+        <li>How faceless channels make money in 2026</li>
+        <li>Realistic expectations and timelines</li>
+        <li>The #1 mistake beginners make on day one</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- MODULES -->
+<div class="section-divider"></div>
+<section class="section" id="modules">
+  <div class="section-label reveal">02 — Course Content</div>
+  <h2 class="section-title reveal">Phase 1 <em>Modules</em></h2>
+  <p class="section-desc reveal">5 core modules covering everything you need to understand before building your channel. All free. No email required.</p>
+
+  <div class="modules-list reveal">
+    <a href="#" class="module-item">
+      <div class="module-num">01</div>
+      <div class="module-info">
+        <h3>What Is YouTube Automation?</h3>
+        <p>Business model overview, revenue streams, and the key players in your team.</p>
+      </div>
+      <div class="module-meta">
+        <span class="module-tag free">Free</span>
+        <span class="module-duration">18 min</span>
+      </div>
+    </a>
+    <a href="#" class="module-item">
+      <div class="module-num">02</div>
+      <div class="module-info">
+        <h3>Choosing a Profitable Niche</h3>
+        <p>CPM analysis, competition research, audience demand, and the 3 filters for picking a winner.</p>
+      </div>
+      <div class="module-meta">
+        <span class="module-tag free">Free</span>
+        <span class="module-duration">31 min</span>
+      </div>
+    </a>
+    <a href="#" class="module-item">
+      <div class="module-num">03</div>
+      <div class="module-info">
+        <h3>Channel Setup & Branding</h3>
+        <p>Name, logo, banner, about page, and channel identity that signals authority from day one.</p>
+      </div>
+      <div class="module-meta">
+        <span class="module-tag free">Free</span>
+        <span class="module-duration">24 min</span>
+      </div>
+    </a>
+    <a href="#" class="module-item">
+      <div class="module-num">04</div>
+      <div class="module-info">
+        <h3>The Production System</h3>
+        <p>Scripts → voiceover → editing → thumbnails. How to build a repeatable pipeline on any budget.</p>
+      </div>
+      <div class="module-meta">
+        <span class="module-tag free">Free</span>
+        <span class="module-duration">42 min</span>
+      </div>
+    </a>
+    <a href="#" class="module-item">
+      <div class="module-num">05</div>
+      <div class="module-info">
+        <h3>Monetization Roadmap</h3>
+        <p>AdSense requirements, affiliate setup, sponsorships, and when to hire your first editor.</p>
+      </div>
+      <div class="module-meta">
+        <span class="module-tag free">Free</span>
+        <span class="module-duration">27 min</span>
+      </div>
+    </a>
+    <div class="module-item" style="opacity:0.5; cursor:default;">
+      <div class="module-num">06</div>
+      <div class="module-info">
+        <h3>Phase 2: Advanced Scripting & SEO</h3>
+        <p>Unlocks in Phase 2 — Deep-dive into YouTube SEO, retention, and AI scriptwriting workflows.</p>
+      </div>
+      <div class="module-meta">
+        <span class="module-tag">Locked</span>
+        <span class="module-duration">Phase 2</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NICHES -->
+<div class="section-divider"></div>
+<section class="section">
+  <div class="section-label reveal">03 — Niche Research</div>
+  <h2 class="section-title reveal">High-CPM <em>Niches</em> in 2026</h2>
+  <p class="section-desc reveal">Not all niches are created equal. These categories attract the highest-paying advertisers and most engaged audiences for faceless channels.</p>
+
+  <div class="niches-grid">
+    <div class="niche-card reveal">
+      <span class="niche-emoji">💰</span>
+      <h4>Personal Finance</h4>
+      <p>Budgeting, investing, credit repair, debt payoff — always in demand.</p>
+      <div class="niche-cpm">CPM: $12–$38</div>
+    </div>
+    <div class="niche-card reveal">
+      <span class="niche-emoji">🏥</span>
+      <h4>Health & Longevity</h4>
+      <p>Anti-aging, supplements, fitness routines, medical explainers.</p>
+      <div class="niche-cpm">CPM: $10–$30</div>
+    </div>
+    <div class="niche-card reveal">
+      <span class="niche-emoji">🤖</span>
+      <h4>AI & Technology</h4>
+      <p>Tools, tutorials, tech news, AI automation explainers.</p>
+      <div class="niche-cpm">CPM: $8–$22</div>
+    </div>
+    <div class="niche-card reveal">
+      <span class="niche-emoji">⚖️</span>
+      <h4>Law & Legal Advice</h4>
+      <p>Legal explainers, court cases, true crime adjacent content.</p>
+      <div class="niche-cpm">CPM: $14–$40</div>
+    </div>
+    <div class="niche-card reveal">
+      <span class="niche-emoji">🏠</span>
+      <h4>Real Estate</h4>
+      <p>Investing, flipping, rental income, market analysis videos.</p>
+      <div class="niche-cpm">CPM: $10–$28</div>
+    </div>
+    <div class="niche-card reveal">
+      <span class="niche-emoji">📚</span>
+      <h4>History & Education</h4>
+      <p>Untold stories, documentary style, high watch time potential.</p>
+      <div class="niche-cpm">CPM: $4–$14</div>
+    </div>
+    <div class="niche-card reveal">
+      <span class="niche-emoji">🧠</span>
+      <h4>Psychology</h4>
+      <p>Relationships, dark psychology, mental health awareness.</p>
+      <div class="niche-cpm">CPM: $6–$16</div>
+    </div>
+    <div class="niche-card reveal">
+      <span class="niche-emoji">🚀</span>
+      <h4>Business & Entrepreneurship</h4>
+      <p>Startup stories, passive income, side hustle content.</p>
+      <div class="niche-cpm">CPM: $8–$24</div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<div class="section-divider"></div>
+<section class="section">
+  <div class="section-label reveal">04 — Recommended Tools</div>
+  <h2 class="section-title reveal">Your <em>Stack</em></h2>
+  <p class="section-desc reveal">The tools that power a professional YouTube automation operation. You don't need all of them — start minimal, scale your stack as you grow.</p>
+
+  <div class="tools-grid">
+    <div class="tool-card reveal">
+      <div class="tool-name">ChatGPT / Claude</div>
+      <div class="tool-purpose">Script writing, research, topic ideation, title generation, and hook refinement.</div>
+      <span class="tool-badge free">Free tier</span>
+    </div>
+    <div class="tool-card reveal">
+      <div class="tool-name">ElevenLabs</div>
+      <div class="tool-purpose">AI voiceover generation with human-quality voices. Best for English narration channels.</div>
+      <span class="tool-badge paid">Paid</span>
+    </div>
+    <div class="tool-card reveal">
+      <div class="tool-name">CapCut / Premiere</div>
+      <div class="tool-purpose">Video editing. CapCut for budget automation; Premiere for complex productions.</div>
+      <span class="tool-badge free">Free</span>
+    </div>
+    <div class="tool-card reveal">
+      <div class="tool-name">Canva</div>
+      <div class="tool-purpose">Thumbnail design. Fast, professional, and infinitely customizable with templates.</div>
+      <span class="tool-badge free">Free tier</span>
+    </div>
+    <div class="tool-card reveal">
+      <div class="tool-name">TubeBuddy / VidIQ</div>
+      <div class="tool-purpose">YouTube SEO, keyword research, competitor analysis, and upload optimization.</div>
+      <span class="tool-badge paid">Paid</span>
+    </div>
+    <div class="tool-card reveal">
+      <div class="tool-name">Fiverr / Upwork</div>
+      <div class="tool-purpose">Hire freelance scriptwriters, editors, voice actors, and thumbnail designers.</div>
+      <span class="tool-badge free">Free to join</span>
+    </div>
+    <div class="tool-card reveal">
+      <div class="tool-name">Invideo AI</div>
+      <div class="tool-purpose">End-to-end video creation from text prompts. Useful for stock footage channels.</div>
+      <span class="tool-badge paid">Paid</span>
+    </div>
+    <div class="tool-card reveal">
+      <div class="tool-name">Pexels / Storyblocks</div>
+      <div class="tool-purpose">Royalty-free stock footage for B-roll. Storyblocks is better value at scale.</div>
+      <span class="tool-badge optional">Optional</span>
+    </div>
+  </div>
+</section>
+
+<!-- MISTAKES -->
+<div class="section-divider"></div>
+<section class="section">
+  <div class="section-label reveal">05 — Avoid These</div>
+  <h2 class="section-title reveal">5 Beginner <em>Mistakes</em></h2>
+  <p class="section-desc reveal">These kill most channels before they ever get a chance to grow. Learn them now so you don't repeat them.</p>
+
+  <div class="mistakes-list">
+    <div class="mistake-item reveal">
+      <div class="mistake-num">01</div>
+      <div class="mistake-content">
+        <h4>Picking a Low-CPM Niche for Passion</h4>
+        <p>Passion doesn't pay the bills. If your niche has a $1 CPM, you'll need 10 million views per month to make $10,000. Pick high-CPM niches you can stay consistent with, not ones you "love."</p>
+      </div>
+    </div>
+    <div class="mistake-item reveal">
+      <div class="mistake-num">02</div>
+      <div class="mistake-content">
+        <h4>Spending Weeks on a Logo Before Publishing</h4>
+        <p>Perfectionism before momentum is the silent killer of channels. Your channel name and thumbnail matter far more than a logo. Publish your first video first.</p>
+      </div>
+    </div>
+    <div class="mistake-item reveal">
+      <div class="mistake-num">03</div>
+      <div class="mistake-content">
+        <h4>Ignoring the First 30 Seconds</h4>
+        <p>YouTube measures audience retention closely. If viewers leave in the first 30 seconds, your video gets suppressed. Every script needs a strong hook before anything else.</p>
+      </div>
+    </div>
+    <div class="mistake-item reveal">
+      <div class="mistake-num">04</div>
+      <div class="mistake-content">
+        <h4>Outsourcing Too Early With No Systems</h4>
+        <p>Hiring a $20 editor before you have a clear production brief, style guide, and feedback process is money down the drain. Build the process first, then hand it off.</p>
+      </div>
+    </div>
+    <div class="mistake-item reveal">
+      <div class="mistake-num">05</div>
+      <div class="mistake-content">
+        <h4>Quitting After 3 Months of "No Views"</h4>
+        <p>The YouTube algorithm rewards channels that have proven audience interest over time. Most successful channels saw near-zero growth for 4–9 months before a breakthrough. Consistency is the strategy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE BANNER -->
+<div class="quote-banner">
+  <p class="quote-text">"You don't build a YouTube automation business in a month. You build the system in a month — then you run it for years."</p>
+  <p class="quote-attr">— Phase 1 Core Principle</p>
+</div>
+
+<!-- ROADMAP -->
+<div class="section-divider"></div>
+<section class="section" id="roadmap">
+  <div class="section-label reveal">06 — Your Path</div>
+  <h2 class="section-title reveal">The 5-Phase <em>Roadmap</em></h2>
+  <p class="section-desc reveal">This course is broken into 5 phases. You're in Phase 1. Complete each phase before moving to the next.</p>
+
+  <div class="roadmap reveal">
+    <div class="roadmap-step">
+      <div class="roadmap-circle">1</div>
+      <h4>Introduction</h4>
+      <p>Business model, niche selection, mindset, tools, and avoiding mistakes.</p>
+    </div>
+    <div class="roadmap-step">
+      <div class="roadmap-circle">2</div>
+      <h4>Content System</h4>
+      <p>Scripting, SEO, AI voiceover, editing workflows, and thumbnail strategy.</p>
+    </div>
+    <div class="roadmap-step">
+      <div class="roadmap-circle">3</div>
+      <h4>Growth Engine</h4>
+      <p>Upload cadence, analytics, YouTube SEO mastery, and algorithm optimization.</p>
+    </div>
+    <div class="roadmap-step">
+      <div class="roadmap-circle">4</div>
+      <h4>Monetization</h4>
+      <p>AdSense, affiliates, digital products, sponsorships, and multi-channel scaling.</p>
+    </div>
+    <div class="roadmap-step">
+      <div class="roadmap-circle">5</div>
+      <h4>Full Automation</h4>
+      <p>Build your team, SOPs, hiring processes, and running a hands-off operation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <div class="reveal">
+      <h2>Ready to Build<em>Your Channel?</em></h2>
+      <p>Phase 1 is completely free. No email signup required. Just start the course and build something real. Phase 2 and beyond unlocks when you're ready to go deeper.</p>
+    </div>
+    <div class="cta-box reveal">
+      <div class="cta-price">FREE</div>
+      <div class="cta-price-label">Phase 1 — Full Access</div>
+      <ul class="cta-features">
+        <li><span>✓</span> 5 video modules (2+ hours)</li>
+        <li><span>✓</span> Niche research framework</li>
+        <li><span>✓</span> Full tool stack guide</li>
+        <li><span>✓</span> Production system blueprint</li>
+        <li><span>✓</span> Monetization roadmap</li>
+        <li><span>✓</span> No email required</li>
+      </ul>
+      <a href="#modules" class="btn-primary" style="width:100%; text-align:center; display:block;">Start Phase 1 Now →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">YT AUTO</div>
+  <div class="footer-note">Phase 1 of 5 · Updated 2026 · No affiliation with YouTube™</div>
+</footer>
+
+<script>
+  // Intersection Observer for reveal animations
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
